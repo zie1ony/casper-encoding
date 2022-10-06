@@ -7,18 +7,16 @@ use blake2::{
 fn main() {
     let key = "PD4bbfLSeqWrVrqZT1LsHzboAf1KdnC1PxDrSH8xSgYrJAgdtTbNQ";
     let key58 = bs58::decode(key).into_vec().unwrap();
+    println!("bs58: {:?}", &key58);
     let key58: Bytes = key58.into();
+    println!("Bytes: {:?}", hex::encode(&key58));
     let key = to_dictionary_item_key(&key58);
-    println!("{:?}", key);
-
-    // let b = vec![1u16,2,3];
-    // let b: Bytes = b.into();
-    // let res = b.to_bytes().unwrap();
-    // println!("{:?}", res);
+    println!("Final: {:?}", key);
 }
 
 fn to_dictionary_item_key<T: ToBytes>(key: &T) -> String {
     let preimage = key.to_bytes().unwrap();
+    println!("Preimage: {:?}", &preimage);
     let hash = blake2b(preimage);
     hex::encode(hash)
 }
