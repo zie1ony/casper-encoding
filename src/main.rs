@@ -1,10 +1,25 @@
-use casper_types::bytesrepr::{ToBytes, Bytes};
+use casper_types::{bytesrepr::{ToBytes, FromBytes, Bytes}, CLType};
 use blake2::{
     digest::{Update, VariableOutput},
     VarBlake2b,
 };
 
 fn main() {
+    let bytes = hex::decode("1600000010000000030000000000000001000000020000000e04").unwrap();
+    let bytes: Vec<u8> = vec![22,0,0,0,16,0,0,0,3,0,0,0,0,0,0,0,1,0,0,0,2,0,0,0,14,4];
+    let (bytes, remainder) = Bytes::from_bytes(&bytes).unwrap();
+    let (bytes, remainder) = Bytes::from_bytes(&bytes).unwrap();
+    println!("{:?}", remainder);
+    let (ty, rem) = CLType::from_bytes(&remainder).unwrap();
+    println!("{:?}", ty);
+    let (list, remainder) = Vec::<u32>::from_bytes(&bytes).unwrap();
+    println!("{:?}", list);
+
+    println!("{:?}", u32::from_vec(vec![255, 255, 255, 255]));
+    println!("{:?}", u32::MAX);
+}
+
+fn test_key58_decode() {
     let key = "PD4bbfLSeqWrVrqZT1LsHzboAf1KdnC1PxDrSH8xSgYrJAgdtTbNQ";
     let key58 = bs58::decode(key).into_vec().unwrap();
     println!("bs58: {:?}", &key58);
